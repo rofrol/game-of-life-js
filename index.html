@@ -1,0 +1,66 @@
+<pre id="board"></pre>
+<script>
+var rowMax = 5;
+var colMax = 5;
+var arr = [
+  [0,0,0,0,0,0],
+  [0,1,0,0,0,0],
+  [0,1,0,0,0,0],
+  [0,1,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0]
+];
+board = document.querySelector("#board");
+board.innerHTML = arr2str(arr);
+setInterval(change, 1000);
+
+function change() {
+  var arrNext = [];
+  for(var i = 0; i < arr.length; i++) {
+    arrNext[i] = [];
+    for(var j = 0; j < arr[i].length; j++) {
+      arrNext[i][j] = nextState(i, j, arr);
+    }
+  }
+  arr = arrNext;
+  board.innerHTML = arr2str(arr);
+}
+
+function getXY(row, col) {
+  if(row > rowMax) row = 0;
+  else if(row < 0) row = rowMax;
+  if(col > colMax) col = 0;
+  else if(col < 0) col = colMax;
+  return arr[row][col];
+}
+
+function neighbours(row, col) {
+  var count = 0;
+  count += getXY(row - 1, col);
+  count += getXY(row - 1, col + 1);
+  count += getXY(row, col + 1);
+  count += getXY(row + 1, col + 1);
+  count += getXY(row + 1, col);
+  count += getXY(row + 1, col - 1);
+  count += getXY(row, col - 1);
+  count += getXY(row - 1, col - 1);
+  return count;
+}
+function nextState(row, col) {
+  count = neighbours(row, col);
+  cell = arr[row][col];
+  if(count === 3 || cell === 1 && count === 2) return 1;
+  else return 0;
+}
+
+function arr2str(arr) {
+  var content = "";
+  for(var i = 0; i < arr.length; i++) {
+    for(var j = 0; j < arr[i].length; j++) {
+      content += arr[i][j];
+    }
+    content += "\n";
+  }
+  return content;
+}
+</script>
